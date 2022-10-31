@@ -4,12 +4,17 @@ import { useDropzone } from "react-dropzone";
 import { getInfo } from "react-mediainfo";
 import { useState } from "react";
 import JsonDataTable from "./components/table";
+import Loader from "./components/loader";
 
 function App() {
   const [file_info, setFile_info] = useState(null);
+  const [loading, setLoading] = useState(false);
   const onDrop = async (files) => {
+    setLoading(true);
+    setFile_info(null);
     const info = await getInfo(files[0]);
     setFile_info(info.media.track);
+    setLoading(false);
   };
 
   var classname = "media-container";
@@ -36,6 +41,7 @@ function App() {
         Drag 'n' drop some file here, or click to select file
         <input {...getInputProps()} />
       </div>
+      <Loader display={loading} className="loader" />
       <JsonDataTable data={file_info} />
       <div className="footer">
         Made with ❤️ by <a href="https://github.com/rahulps1000">Rahul</a>
